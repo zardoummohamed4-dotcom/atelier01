@@ -1,16 +1,36 @@
 import { CommonModule } from '@angular/common';
-import { Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Produit } from '../model/produit.model';
+import { ProduitService } from '../services/produit.service';
+
+import { RouterLink } from '@angular/router';
 @Component({
-  imports: [CommonModule],
+  imports: [CommonModule,RouterLink],
   selector: 'app-produits',
-  styleUrl: './produits.css',
+  standalone: true,
   templateUrl: './produits.html',
+  styleUrl: './produits.css'
 })
+export class ProduitsComponent implements OnInit  {
+  produits! : Produit[]; //un tableau de Produit
 
-export class ProduitsComponent  {
-produits : string[]; 
-constructor() {
-this.produits = ["PC Asus", "Imprimante Epson", "Tablette Samsung"];
+
+  constructor(private produitService: ProduitService) {
+   //this.produits=[]
+     
+    
+   }
+  
+   ngOnInit() {
+    this.produits = this.produitService.listeProduits();
+     }
+   supprimerProduit(p: Produit) 
+  {
+  //console.log(p);
+  let conf = confirm("Etes-vous sûr ?");
+  if (conf)
+  this.produitService.supprimerProduit(p);
+  }
+
 }
 
-}
